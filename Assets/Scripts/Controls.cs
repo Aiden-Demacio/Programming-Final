@@ -35,6 +35,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""DirSwitch"",
+                    ""type"": ""Button"",
+                    ""id"": ""efe89802-1518-4692-8efd-7423621ec480"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -50,7 +59,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""WASD"",
+                    ""name"": ""LMBRMB"",
                     ""id"": ""2b7f6703-01e9-446e-8efa-28966a198788"",
                     ""path"": ""3DVector"",
                     ""interactions"": """",
@@ -61,42 +70,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""up"",
-                    ""id"": ""6af36b4a-e277-4cea-a67c-8935bc19676e"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""08a53c79-80c1-4006-87db-18d49fee3771"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""c31713bc-48e7-48bd-9dd2-49df5c4fa687"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""right"",
                     ""id"": ""cb68c561-61af-48b5-ad86-b4acf4e0158d"",
-                    ""path"": ""<Keyboard>/d"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -107,7 +83,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""forward"",
                     ""id"": ""7bda07f4-f314-458a-9c6f-7d79e2c2b951"",
-                    ""path"": ""<Keyboard>/w"",
+                    ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -116,15 +92,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""backward"",
-                    ""id"": ""872c5c6c-b7a0-46ab-9bf8-f49717fe2358"",
-                    ""path"": ""<Keyboard>/s"",
+                    ""name"": """",
+                    ""id"": ""1bdc54e1-7133-4988-9f18-b0cec6cd3ea6"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""DirSwitch"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -134,6 +110,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         // Game
         m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
         m_Game_Movement = m_Game.FindAction("Movement", throwIfNotFound: true);
+        m_Game_DirSwitch = m_Game.FindAction("DirSwitch", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -196,11 +173,13 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Game;
     private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
     private readonly InputAction m_Game_Movement;
+    private readonly InputAction m_Game_DirSwitch;
     public struct GameActions
     {
         private @Controls m_Wrapper;
         public GameActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Game_Movement;
+        public InputAction @DirSwitch => m_Wrapper.m_Game_DirSwitch;
         public InputActionMap Get() { return m_Wrapper.m_Game; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -213,6 +192,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
+            @DirSwitch.started += instance.OnDirSwitch;
+            @DirSwitch.performed += instance.OnDirSwitch;
+            @DirSwitch.canceled += instance.OnDirSwitch;
         }
 
         private void UnregisterCallbacks(IGameActions instance)
@@ -220,6 +202,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
             @Movement.canceled -= instance.OnMovement;
+            @DirSwitch.started -= instance.OnDirSwitch;
+            @DirSwitch.performed -= instance.OnDirSwitch;
+            @DirSwitch.canceled -= instance.OnDirSwitch;
         }
 
         public void RemoveCallbacks(IGameActions instance)
@@ -240,5 +225,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     public interface IGameActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnDirSwitch(InputAction.CallbackContext context);
     }
 }
