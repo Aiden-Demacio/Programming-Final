@@ -5,6 +5,7 @@ public class BallController : MonoBehaviour
 
     public float speed;
     public GameObject Ball;
+    private bool fall = false;
     [SerializeField] private Rigidbody rb;
     Vector3 movDir;
     Vector3 pos;
@@ -29,6 +30,10 @@ public class BallController : MonoBehaviour
         //{
             
         //}
+        if (fall)
+        {
+            transform.Translate(0, -1, 0);
+        }
     }
 
     public void SetMovDir(Vector3 MovDir)
@@ -49,6 +54,14 @@ public class BallController : MonoBehaviour
         {
             movDir.z = 0;
             movDir.x = 1;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other == null)
+        {
+            fall = true;
         }
     }
 }

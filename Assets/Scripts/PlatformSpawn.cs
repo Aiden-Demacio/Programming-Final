@@ -10,6 +10,7 @@ public class PlatformSpawn : MonoBehaviour
     [SerializeField] GameObject Collectable;
     private float move = 3f;
     private int rand;
+    int frame = 1;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +20,10 @@ public class PlatformSpawn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+        frame++;
+        if (frame % 6 == 0)
+        {
         rand = Random.Range(0, 2);
         if(rand < 1)
         {
@@ -28,13 +33,20 @@ public class PlatformSpawn : MonoBehaviour
         {
             transform.Translate(0, 0, move);
         }
-        float x = transform.position.x;
-        float y = transform.position.y; 
-        float z = transform.position.z;
+        //float x = transform.position.x;
+        //float y = transform.position.y; 
+        //float z = transform.position.z;
         //Vector3 location = (x, y, z);
-        Instantiate(spawn, transform.position, transform.rotation);
-        //transform.position = transform.position.y + 2;
-        Instantiate(Collectable, transform.position, transform.rotation);
+
+        
+            Instantiate(spawn, transform.position, transform.rotation);
+            //transform.position = transform.position.y + 2;
+            Instantiate(Collectable, transform.position, transform.rotation);
+        }
+        if(frame%30 == 0)
+        {
+            frame = 0;
+        }
         
     }
 
