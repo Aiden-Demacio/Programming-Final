@@ -20,7 +20,7 @@ public class PlatformSpawn : MonoBehaviour
     void Update()
     {
         rand = Random.Range(0, 2);
-        if(  rand < 1)
+        if(rand < 1)
         {
             transform.Translate(move, 0, 0);
         }
@@ -28,7 +28,12 @@ public class PlatformSpawn : MonoBehaviour
         {
             transform.Translate(0, 0, move);
         }
+        float x = transform.position.x;
+        float y = transform.position.y; 
+        float z = transform.position.z;
+        //Vector3 location = (x, y, z);
         Instantiate(spawn, transform.position, transform.rotation);
+        //transform.position = transform.position.y + 2;
         Instantiate(Collectable, transform.position, transform.rotation);
         
     }

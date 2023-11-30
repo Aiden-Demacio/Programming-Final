@@ -44,6 +44,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CameraMov"",
+                    ""type"": ""Button"",
+                    ""id"": ""f3522aff-5ccc-4d4b-b934-970545e5837c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -101,6 +110,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""DirSwitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""efb2cc73-dbc2-42a8-bcef-55d89e4bfdaf"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraMov"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -111,6 +131,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
         m_Game_Movement = m_Game.FindAction("Movement", throwIfNotFound: true);
         m_Game_DirSwitch = m_Game.FindAction("DirSwitch", throwIfNotFound: true);
+        m_Game_CameraMov = m_Game.FindAction("CameraMov", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -174,12 +195,14 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
     private readonly InputAction m_Game_Movement;
     private readonly InputAction m_Game_DirSwitch;
+    private readonly InputAction m_Game_CameraMov;
     public struct GameActions
     {
         private @Controls m_Wrapper;
         public GameActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Game_Movement;
         public InputAction @DirSwitch => m_Wrapper.m_Game_DirSwitch;
+        public InputAction @CameraMov => m_Wrapper.m_Game_CameraMov;
         public InputActionMap Get() { return m_Wrapper.m_Game; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -195,6 +218,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @DirSwitch.started += instance.OnDirSwitch;
             @DirSwitch.performed += instance.OnDirSwitch;
             @DirSwitch.canceled += instance.OnDirSwitch;
+            @CameraMov.started += instance.OnCameraMov;
+            @CameraMov.performed += instance.OnCameraMov;
+            @CameraMov.canceled += instance.OnCameraMov;
         }
 
         private void UnregisterCallbacks(IGameActions instance)
@@ -205,6 +231,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @DirSwitch.started -= instance.OnDirSwitch;
             @DirSwitch.performed -= instance.OnDirSwitch;
             @DirSwitch.canceled -= instance.OnDirSwitch;
+            @CameraMov.started -= instance.OnCameraMov;
+            @CameraMov.performed -= instance.OnCameraMov;
+            @CameraMov.canceled -= instance.OnCameraMov;
         }
 
         public void RemoveCallbacks(IGameActions instance)
@@ -226,5 +255,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnDirSwitch(InputAction.CallbackContext context);
+        void OnCameraMov(InputAction.CallbackContext context);
     }
 }

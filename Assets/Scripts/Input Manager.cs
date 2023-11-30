@@ -22,6 +22,7 @@ public static class InputManager
             dir = !dir;
             b.switchDir(dir);
         };
+        
     }
 
     public static void gameMode()
